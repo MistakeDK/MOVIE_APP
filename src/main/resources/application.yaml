@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /movie
+
+spring:
+  datasource:
+    url: ${DATA_SOURCES_URL}
+    username: ${DATA_SOURCES_USERNAME}
+    password: ${DATA_SOURCES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
