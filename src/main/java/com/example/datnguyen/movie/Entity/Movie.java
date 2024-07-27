@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Movie {
+public class Movie extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
