@@ -1,6 +1,5 @@
 package com.example.datnguyen.movie.DTO.Reponse;
 
-import com.example.datnguyen.movie.Enum.CategoryMovie;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,12 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MovieResponse {
-    String id;
-    String slugName;
+public class EpisodeResponse {
     String name;
-    CategoryMovie categoryMovie;
-    String img;
-    Double price;
-    Boolean isActive;
+    String linkEmbed;
 }

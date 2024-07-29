@@ -1,5 +1,6 @@
 package com.example.datnguyen.movie.Service;
 
+import com.example.datnguyen.movie.DTO.Reponse.MovieDetailResponse;
 import com.example.datnguyen.movie.DTO.Reponse.MovieResponse;
 import com.example.datnguyen.movie.DTO.Reponse.PaginationResponse;
 import com.example.datnguyen.movie.DTO.Request.MovieCreationRequest;
@@ -14,4 +15,6 @@ public interface MovieService {
 
 
     PaginationResponse<?> getList(Pageable pageable, String keyword,String category) throws Exception;
+
+    MovieDetailResponse getById(String id);
 }

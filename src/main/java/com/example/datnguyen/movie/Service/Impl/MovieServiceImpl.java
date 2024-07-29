@@ -1,12 +1,16 @@
 package com.example.datnguyen.movie.Service.Impl;
 
+import com.example.datnguyen.movie.DTO.Reponse.MovieDetailResponse;
 import com.example.datnguyen.movie.DTO.Reponse.MovieResponse;
 import com.example.datnguyen.movie.DTO.Reponse.PaginationResponse;
 import com.example.datnguyen.movie.DTO.Request.MovieCreationRequest;
+import com.example.datnguyen.movie.Entity.Episode;
 import com.example.datnguyen.movie.Entity.Movie;
 import com.example.datnguyen.movie.Exception.AppException;
 import com.example.datnguyen.movie.Exception.ErrorCode;
+import com.example.datnguyen.movie.Mapper.EpisodeMapper;
 import com.example.datnguyen.movie.Mapper.MovieMapper;
+import com.example.datnguyen.movie.Repository.EpisodeRepository;
 import com.example.datnguyen.movie.Repository.MovieRepository;
 import com.example.datnguyen.movie.Service.Http.ClientService;
 import com.example.datnguyen.movie.Service.MovieService;
@@ -18,6 +22,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +36,9 @@ import java.util.Objects;
 public class MovieServiceImpl implements MovieService {
     ClientService service;
     MovieRepository repository;
+    EpisodeRepository episodeRepository;
     MovieMapper mapper;
+    EpisodeMapper episodeMapper;
     @Override
     public Object getListFeignClient(int page,String keyword) {
         if(Objects.isNull(keyword)){
@@ -64,4 +71,13 @@ public class MovieServiceImpl implements MovieService {
                 .build();
     }
 
+    @Override
+    public MovieDetailResponse getById(String id) {
+        Movie movie=repository.findById(id).orElseThrow(()-> new AppException(ErrorCode.MOVIE_NOT_EXIST));
+        List<Episode> episodes= episodeRepository.findByMovie_IdOrderByNameAsc(id);
+        return MovieDetailResponse.builder()
+                .episodes(episodes.stream().map(episodeMapper::toEpisodeResponse).toList())
+                .movie(mapper.toMovieResponse(movie))
+                .build();
+    }
 }

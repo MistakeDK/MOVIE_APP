@@ -41,4 +41,12 @@ public class MovieController {
         ApiResponse<?> apiResponse=ApiResponse.builder().result(list).build();
         return ResponseEntity.ok().body(apiResponse);
     }
+    @GetMapping("/getById/{id}")
+    ResponseEntity<?> getById(@PathVariable String id){
+        var result=movieService.getById(id);
+        ApiResponse<?> apiResponse=ApiResponse.builder()
+                .result(result)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
 }
