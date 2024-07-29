@@ -4,6 +4,8 @@ import com.example.datnguyen.movie.DTO.Reponse.MovieResponse;
 import com.example.datnguyen.movie.DTO.Reponse.PaginationResponse;
 import com.example.datnguyen.movie.DTO.Request.MovieCreationRequest;
 import com.example.datnguyen.movie.Entity.Movie;
+import com.example.datnguyen.movie.Exception.AppException;
+import com.example.datnguyen.movie.Exception.ErrorCode;
 import com.example.datnguyen.movie.Mapper.MovieMapper;
 import com.example.datnguyen.movie.Repository.MovieRepository;
 import com.example.datnguyen.movie.Service.Http.ClientService;

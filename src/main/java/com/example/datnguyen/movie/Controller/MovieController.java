@@ -3,6 +3,8 @@ package com.example.datnguyen.movie.Controller;
 import com.example.datnguyen.movie.DTO.Reponse.ApiResponse;
 import com.example.datnguyen.movie.DTO.Request.MovieCreationRequest;
 import com.example.datnguyen.movie.Enum.CategoryMovie;
+import com.example.datnguyen.movie.Exception.AppException;
+import com.example.datnguyen.movie.Exception.ErrorCode;
 import com.example.datnguyen.movie.Service.Impl.MovieServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,7 @@ public class MovieController {
     @GetMapping("/list")
     ResponseEntity<?> getList(Pageable pageable,
                               @RequestParam(required = false) String keyword,
-                              @RequestParam(required = false,defaultValue = "ALL") String category){
+                              @RequestParam(required = false,defaultValue = "ALL") String category) {
         var list=movieService.getList(pageable,keyword,category);
         ApiResponse<?> apiResponse=ApiResponse.builder().result(list).build();
         return ResponseEntity.ok().body(apiResponse);

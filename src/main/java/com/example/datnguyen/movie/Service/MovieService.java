@@ -13,5 +13,5 @@ public interface MovieService {
     void createMovie(MovieCreationRequest request);
 
 
-    PaginationResponse<?> getList(Pageable pageable, String keyword,String category);
+    PaginationResponse<?> getList(Pageable pageable, String keyword,String category) throws Exception;
 }
