@@ -20,14 +20,21 @@ public class Movie extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+    @Column(nullable = false)
     String slugName;
+    @Column(nullable = false)
     String name;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     CategoryMovie categoryMovie;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     TypeMovie typeMovie;
+    @Column(nullable = false)
     String img;
+    @Column(nullable = false)
     Double price;
+    @Column(nullable = false)
     Boolean isActive;
     @OneToMany(orphanRemoval = true,mappedBy = "movie",cascade = CascadeType.ALL)
     Set<Episode> episodes;
