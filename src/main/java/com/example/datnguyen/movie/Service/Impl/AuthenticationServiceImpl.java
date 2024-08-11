@@ -12,6 +12,9 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -92,5 +96,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user=userRepository.findById(signedJWT.getJWTClaimsSet().getSubject())
                 .orElseThrow(()->new AppException(ErrorCode.UN_AUTHENTICATED));
         return signedJWT;
+    }
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        if(Arrays.stream(request.getCookies()).noneMatch(c -> c.getName().equals("jwt"))){
+            return;
+        }
+        Cookie cookie=new Cookie("jwt",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 }

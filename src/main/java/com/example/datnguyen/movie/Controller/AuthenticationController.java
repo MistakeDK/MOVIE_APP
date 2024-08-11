@@ -6,6 +6,7 @@ import com.example.datnguyen.movie.DTO.Request.LoginRequest;
 import com.example.datnguyen.movie.Service.Impl.AuthenticationServiceImpl;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,14 @@ public class AuthenticationController {
                 .build();
         Cookie cookie=new Cookie("jwt", authenticationService.authentication(request));
         response.addCookie(cookie);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+    @PostMapping("/logout")
+    ResponseEntity<?> logout(HttpServletRequest request,HttpServletResponse response){
+        authenticationService.logout(request,response);
+        ApiResponse<?> apiResponse=ApiResponse.builder()
+                .message("Log out success")
+                .build();
         return ResponseEntity.ok().body(apiResponse);
     }
     @PostMapping("/introspect")

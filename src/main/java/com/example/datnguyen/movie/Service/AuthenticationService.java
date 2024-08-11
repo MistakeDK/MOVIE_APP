@@ -7,6 +7,8 @@ import com.example.datnguyen.movie.Entity.User;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.KeyLengthException;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.text.ParseException;
 
@@ -16,4 +18,6 @@ public interface AuthenticationService {
     String authentication(LoginRequest request) throws JOSEException;
     String buildScope(User user);
     SignedJWT verifyToken(String token) throws JOSEException, ParseException;
+
+    void logout(HttpServletRequest request, HttpServletResponse response);
 }

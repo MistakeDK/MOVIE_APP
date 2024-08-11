@@ -46,8 +46,6 @@ public class MovieController {
                               @RequestParam(required = false) String keyword,
                               @RequestParam(required = false,defaultValue = "ALL") String category,
                               HttpServletRequest request) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        log.info(context.getAuthentication().getPrincipal().toString());
         var list=movieService.getList(pageable,keyword,category);
         ApiResponse<?> apiResponse=ApiResponse.builder().result(list).build();
         return ResponseEntity.ok().body(apiResponse);

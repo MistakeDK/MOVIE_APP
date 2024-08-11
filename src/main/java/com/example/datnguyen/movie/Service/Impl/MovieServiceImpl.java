@@ -58,7 +58,6 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    @PreAuthorize("hasRole('USER')")
     public PaginationResponse<?> getList(Pageable pageable, String keyword,String category) {
         Page<Movie> list=null;
         list=repository.findAll(Specification.where(MovieSpecifications.hasCategory(category)
