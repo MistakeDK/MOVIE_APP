@@ -3,6 +3,7 @@ package com.example.datnguyen.movie.Exception;
 import com.example.datnguyen.movie.DTO.Reponse.ErrorResponse;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -16,6 +17,14 @@ public class ExceptionHandle {
                 .build();
         return ResponseEntity.badRequest().body(errorResponse);
     }
+    @ExceptionHandler({AccessDeniedException.class})
+    ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException exception){
+        ErrorResponse errorResponse=ErrorResponse.builder()
+                .code(ErrorCode.UN_AUTHORIZATION.code)
+                .message(ErrorCode.UN_AUTHORIZATION.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatusCode.valueOf(403)).body(errorResponse);
+    }
     @ExceptionHandler({Exception.class})
     ResponseEntity<ErrorResponse> handleException(Exception exception){
         ErrorResponse errorResponse=ErrorResponse.builder()
@@ -24,5 +33,6 @@ public class ExceptionHandle {
                 .build();
         return ResponseEntity.internalServerError().body(errorResponse);
     }
+
 
 }

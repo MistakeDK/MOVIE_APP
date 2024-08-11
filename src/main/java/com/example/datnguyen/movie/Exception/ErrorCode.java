@@ -11,7 +11,8 @@ public enum ErrorCode {
     USER_EXIST(2000,"User Exist"),
     USER_NOT_EXIST(2001,"User not Exist"),
     UN_AUTHENTICATED(3000,"Unauthenticated"),
-    TOKEN_INVALID(3001,"Token invalid");
+    UN_AUTHORIZATION(3001,"don't have permission"),
+    TOKEN_INVALID(3002,"Token invalid");
     final int code;
     final String message;
 }
