@@ -6,18 +6,26 @@ import com.example.datnguyen.movie.Enum.CategoryMovie;
 import com.example.datnguyen.movie.Exception.AppException;
 import com.example.datnguyen.movie.Exception.ErrorCode;
 import com.example.datnguyen.movie.Service.Impl.MovieServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/movies")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@Slf4j
 public class MovieController {
     MovieServiceImpl movieService;
     @GetMapping()
@@ -36,7 +44,10 @@ public class MovieController {
     @GetMapping("/list")
     ResponseEntity<?> getList(Pageable pageable,
                               @RequestParam(required = false) String keyword,
-                              @RequestParam(required = false,defaultValue = "ALL") String category) {
+                              @RequestParam(required = false,defaultValue = "ALL") String category,
+                              HttpServletRequest request) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        log.info(context.getAuthentication().getPrincipal().toString());
         var list=movieService.getList(pageable,keyword,category);
         ApiResponse<?> apiResponse=ApiResponse.builder().result(list).build();
         return ResponseEntity.ok().body(apiResponse);

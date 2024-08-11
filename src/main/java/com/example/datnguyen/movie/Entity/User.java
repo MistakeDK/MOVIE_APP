@@ -1,5 +1,6 @@
 package com.example.datnguyen.movie.Entity;
 
+import com.example.datnguyen.movie.Enum.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,4 +20,7 @@ public class User {
     String gmail;
     @Column(nullable = false)
     String password;
+    @Enumerated(EnumType.STRING)
+    Role role;
+
 }

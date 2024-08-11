@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +58,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @PreAuthorize("hasRole('USER')")
     public PaginationResponse<?> getList(Pageable pageable, String keyword,String category) {
         Page<Movie> list=null;
         list=repository.findAll(Specification.where(MovieSpecifications.hasCategory(category)
