@@ -36,9 +36,6 @@ public class SecurityConfig  {
     private String PRIVATE_KEY;
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
-    private final HttpMethod[] PUBLIC_METHOD={
-            HttpMethod.POST,HttpMethod.PATCH,HttpMethod.GET,HttpMethod.PUT,HttpMethod.DELETE
-    };
     private final String[] PUBLIC_ENDPOINT={
             "/authentication/**",
             "/users/**",
@@ -61,7 +58,6 @@ public class SecurityConfig  {
         return new BearerTokenResolver() {
             @Override
             public String resolve(HttpServletRequest request) {
-                log.info(Arrays.toString(request.getCookies()));
                 if(request.getCookies()!=null){
                     for (Cookie cookie:request.getCookies()){
                         if("jwt".equals(cookie.getName())){

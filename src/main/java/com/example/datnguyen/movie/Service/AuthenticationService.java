@@ -19,5 +19,5 @@ public interface AuthenticationService {
     String buildScope(User user);
     SignedJWT verifyToken(String token) throws JOSEException, ParseException;
 
-    void logout(HttpServletRequest request, HttpServletResponse response);
+    void logout(String token,HttpServletResponse response) throws ParseException, JOSEException;
 }

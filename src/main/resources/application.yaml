@@ -19,3 +19,7 @@ spring:
   jwt:
     secret_key: ${JWT_SECRET_KEY}
     time_valid: ${JWT_TIME_VALID}
+
+redis:
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT}

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -43,6 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.secret_key}")
     @NonFinal
     String PRIVATE_KEY;
+    RedisServiceImpl redisService;
     @Override
     public Boolean introspect(IntrospectRequest request) {
         var token=request.getToken();
@@ -64,6 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .subject(user.getId())
                 .issueTime(new Date())
                 .claim("scope",buildScope(user))
+                .expirationTime(expiration)
                 .build();
         Payload payload=new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject=new JWSObject(header,payload);
@@ -92,6 +95,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         JWSVerifier verifier=new MACVerifier(PRIVATE_KEY.getBytes(StandardCharsets.UTF_8));
         SignedJWT signedJWT=SignedJWT.parse(token);
         Date expiryTime=signedJWT.getJWTClaimsSet().getExpirationTime();
+        if(expiryTime.before(Date.from(Instant.now()))||redisService.hasKey(signedJWT.getJWTClaimsSet().getJWTID())){
+            throw new AppException(ErrorCode.TOKEN_INVALID);
+        }
         var verified=signedJWT.verify(verifier);
         var user=userRepository.findById(signedJWT.getJWTClaimsSet().getSubject())
                 .orElseThrow(()->new AppException(ErrorCode.UN_AUTHENTICATED));
@@ -99,12 +105,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        if(Arrays.stream(request.getCookies()).noneMatch(c -> c.getName().equals("jwt"))){
+    public void logout(String token,HttpServletResponse response) throws ParseException, JOSEException {
+        if(token.isEmpty()){
             return;
         }
+        SignedJWT signedJWT=verifyToken(token);
+        redisService.saveKeyAndTTL(signedJWT.getJWTClaimsSet().getJWTID(),"INVALID_TOKEN",calculateTimeExpire(signedJWT));
         Cookie cookie=new Cookie("jwt",null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+    }
+    public long calculateTimeExpire(SignedJWT signedJWT) throws ParseException {
+        Duration duration=Duration.between(Instant.now(),signedJWT.getJWTClaimsSet().getExpirationTime().toInstant());
+        return duration.getSeconds();
     }
 }

@@ -12,10 +12,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,8 +32,8 @@ public class AuthenticationController {
         return ResponseEntity.ok().body(apiResponse);
     }
     @PostMapping("/logout")
-    ResponseEntity<?> logout(HttpServletRequest request,HttpServletResponse response){
-        authenticationService.logout(request,response);
+    ResponseEntity<?> logout(@CookieValue("jwt") String token, HttpServletResponse response) throws ParseException, JOSEException {
+        authenticationService.logout(token,response);
         ApiResponse<?> apiResponse=ApiResponse.builder()
                 .message("Log out success")
                 .build();
