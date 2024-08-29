@@ -19,9 +19,11 @@ public class MovieCreationRequest {
     @NonNull
     CategoryMovie categoryMovie;
     @NonNull
-    String img;
-    @NonNull
     Double price;
+    @NonNull
+    String posterUrl;
+    @NonNull
+    String thumbUrl;
     @NonNull
     TypeMovie typeMovie;
     @NonNull

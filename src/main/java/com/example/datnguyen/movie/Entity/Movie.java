@@ -31,11 +31,13 @@ public class Movie extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     TypeMovie typeMovie;
     @Column(nullable = false)
-    String img;
-    @Column(nullable = false)
     Double price;
     @Column(nullable = false)
     Boolean isActive;
+    @Column(nullable = false)
+    String posterUrl;
+    @Column(nullable = false)
+    String thumbUrl;
     @OneToMany(orphanRemoval = true,mappedBy = "movie",cascade = CascadeType.ALL)
     Set<Episode> episodes;
 }
